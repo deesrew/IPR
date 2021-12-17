@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<script>
+    function sendForm(form, url) {
+        function sendMessage(message) {
+            fetch(url, {
+                method: 'POST',
+                body: message
+            });
+        }
+        form.onsubmit = function() {
+            let message = form.message.value;
+            if (message) {
+                form.message.value = '';
+                sendMessage(message);
+            }
+            return false;
+        };
+    }
+
+    function getMessage(elem, url) {
+
+        function showMessage(message) {
+            let messageElem = document.createElement('div');
+            messageElem.append(message);
+            elem.append(messageElem);
+        }
+
+        async function longPollGetMess() {
+            let response = await fetch(url);
+
+            if (response.status == 502) {
+                await longPollGetMess();
+            } else if (response.status != 200) {
+                showMessage(response.statusText);
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                await longPollGetMess();
+            } else {
+                let message = await response.text();
+                showMessage(message);
+                await longPollGetMess();
+            }
+        }
+        subscribe();
+    }
+</script>
+
+<form name="publish">
+	<input type="text" name="message" />
+	<input type="submit" value="Send" />
+</form>
+
+<div id="messages">
+
+</div>
+
+<script>
+    new sendForm(document.forms.publish, 'postMess');
+    new getMessage(document.getElementById('messages'), 'getMess');
+</script>
