@@ -1,61 +1,110 @@
 <?php
 
 /**
- * Base class
+ * Класс Создатель объявляет фабричный метод, который должен возвращать объект
+ * класса Продукт. Подклассы Создателя обычно предоставляют реализацию этого
+ * метода.
  */
-abstract class CommonAbstract
+abstract class Creator
 {
 	/**
-	 * Create new class
+	 * Обратите внимание, что Создатель может также обеспечить реализацию
+	 * фабричного метода по умолчанию.
 	 */
-	public static function initial($class)
-	{
-		return new $class();
-	}
+	abstract public function factoryMethod(): Product;
 
 	/**
-	 * Common methods
+	 * Также заметьте, что, несмотря на название, основная обязанность Создателя
+	 * не заключается в создании продуктов. Обычно он содержит некоторую базовую
+	 * бизнес-логику, которая основана на объектах Продуктов, возвращаемых
+	 * фабричным методом. Подклассы могут косвенно изменять эту бизнес-логику,
+	 * переопределяя фабричный метод и возвращая из него другой тип продукта.
 	 */
-	abstract public function run();
-}
-
-/**
- * Class1 for sample
- */
-class Class1 extends CommonAbstract
-{
-	public function run()
+	public function someOperation(): string
 	{
-		echo 'Class1 run<br>';
+		// Вызываем фабричный метод, чтобы получить объект-продукт.
+		$product = $this->factoryMethod();
+		// Далее, работаем с этим продуктом.
+		$result = "Creator: The same creator's code has just worked with " .
+			$product->operation();
+
+		return $result;
 	}
 }
 
 /**
- * Class2 for sample
+ * Конкретные Создатели переопределяют фабричный метод для того, чтобы изменить
+ * тип результирующего продукта.
  */
-class Class2 extends CommonAbstract
+class ConcreteCreator1 extends Creator
 {
-	public function run()
+	/**
+	 * Обратите внимание, что сигнатура метода по-прежнему использует тип
+	 * абстрактного продукта, хотя фактически из метода возвращается конкретный
+	 * продукт. Таким образом, Создатель может оставаться независимым от
+	 * конкретных классов продуктов.
+	 */
+	public function factoryMethod(): Product
 	{
-		echo 'Class2 run<br>';
+		return new ConcreteProduct1();
 	}
 }
 
+class ConcreteCreator2 extends Creator
+{
+	public function factoryMethod(): Product
+	{
+		return new ConcreteProduct2();
+	}
+}
 
 /**
- * demo
+ * Интерфейс Продукта объявляет операции, которые должны выполнять все
+ * конкретные продукты.
  */
+interface Product
+{
+	public function operation(): string;
+}
 
-$a = CommonAbstract::initial('Class1');
-$a->run();
-/*
-    Class1 run
+/**
+ * Конкретные Продукты предоставляют различные реализации интерфейса Продукта.
  */
+class ConcreteProduct1 implements Product
+{
+	public function operation(): string
+	{
+		return "{Result of the ConcreteProduct1}";
+	}
+}
 
-$b = CommonAbstract::initial('Class2');
-$b->run();
-/*
-    Class2 run
+class ConcreteProduct2 implements Product
+{
+	public function operation(): string
+	{
+		return "{Result of the ConcreteProduct2}";
+	}
+}
+
+/**
+ * Клиентский код работает с экземпляром конкретного создателя, хотя и через его
+ * базовый интерфейс. Пока клиент продолжает работать с создателем через базовый
+ * интерфейс, вы можете передать ему любой подкласс создателя.
  */
+function clientCode(Creator $creator)
+{
+	// ...
+	echo "Client: I'm not aware of the creator's class, but it still works.\n"
+		. $creator->someOperation();
+	// ...
+}
 
-# end of file
+/**
+ * Приложение выбирает тип создателя в зависимости от конфигурации или среды.
+ */
+echo "App: Launched with the ConcreteCreator1.\n";
+clientCode(new ConcreteCreator1());
+echo "\n\n";
+
+echo "App: Launched with the ConcreteCreator2.\n";
+clientCode(new ConcreteCreator2());

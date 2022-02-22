@@ -1,83 +1,66 @@
 <?php
 
 /**
- * ClassA
+ * Целевой класс объявляет интерфейс, с которым может работать клиентский код.
  */
-class ClassA
+class Target
 {
-	public function methodA()
+	public function request(): string
 	{
-		echo 'ClassA methodA<br>';
+		return "Target: The default target's behavior.";
 	}
 }
 
 /**
- * ClassB
+ * Адаптируемый класс содержит некоторое полезное поведение, но его интерфейс
+ * несовместим с существующим клиентским кодом. Адаптируемый класс нуждается в
+ * некоторой доработке, прежде чем клиентский код сможет его использовать.
  */
-class ClassB
+class Adaptee
 {
-	public function methodB()
+	public function specificRequest(): string
 	{
-		echo 'ClassB methodB<br>';
+		return ".eetpadA eht fo roivaheb laicepS";
 	}
 }
 
 /**
- * Base Adapter Interface
+ * Адаптер делает интерфейс Адаптируемого класса совместимым с целевым
+ * интерфейсом.
  */
-interface AdapterInterface
+class Adapter extends Target
 {
-	public function commonMethod();
-}
+	private $adaptee;
 
-/**
- * Adapter for ClassA
- */
-class AdapterA implements AdapterInterface
-{
-	protected $class;
-
-	public function __construct()
+	public function __construct(Adaptee $adaptee)
 	{
-		$this->class = new ClassA();
+		$this->adaptee = $adaptee;
 	}
 
-	public function commonMethod()
+	public function request(): string
 	{
-		return $this->class->methodA();
+		return "Adapter: (TRANSLATED) " . strrev($this->adaptee->specificRequest());
 	}
 }
 
 /**
- * Adapter for ClassB
+ * Клиентский код поддерживает все классы, использующие целевой интерфейс.
  */
-class AdapterB implements AdapterInterface
+function clientCode(Target $target)
 {
-	protected $class;
-
-	public function __construct()
-	{
-		$this->class = new ClassB();
-	}
-
-	public function commonMethod()
-	{
-		return $this->class->methodB();
-	}
+	echo $target->request();
 }
 
-/**
- * demo
- */
+echo "Client: I can work just fine with the Target objects:\n";
+$target = new Target();
+clientCode($target);
+echo "\n\n";
 
-/**
- * create adapter's
- */
-$adapter1 = new AdapterA();
-$adapter2 = new AdapterB();
+$adaptee = new Adaptee();
+echo "Client: The Adaptee class has a weird interface. See, I don't understand it:\n";
+echo "Adaptee: " . $adaptee->specificRequest();
+echo "\n\n";
 
-/**
- * run
- */
-$adapter1->commonMethod(); // ClassA methodA
-$adapter2->commonMethod(); // ClassB methodB
+echo "Client: But I can work with it via the Adapter:\n";
+$adapter = new Adapter($adaptee);
+clientCode($adapter);
