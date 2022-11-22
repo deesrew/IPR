@@ -13,12 +13,12 @@ class FixtureTest extends \PHPUnit\Framework\TestCase {
 	public function test_fixture_1()
 	{
 		$this->counter++;
-		$this->assertSame( 1, $this->counter );
+		$this->assertSame(1, $this->counter);
 	}
 
 	public function test_fixture_2()
 	{
-		$this->assertSame( 0, $this->counter );
+		$this->assertSame(0, $this->counter);
 	}
 
 }
