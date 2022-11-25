@@ -15,6 +15,21 @@ CREATE TABLE ipr.log
     `row_id` INT( 11 ) NOT NULL
 );
 
+DROP PROCEDURE IF EXISTS ipr.cont_data;
+DELIMITER //
+
+CREATE PROCEDURE ipr.generate_tr ()
+BEGIN
+  DECLARE i INT DEFAULT 0;
+  WHILE i <10000 DO
+	set @num = FLOOR(RAND()*(1000000-0));
+	set i = i + 1;
+insert into ipr.cont_data(text) values (@num);
+END WHILE;
+END// DELIMITER ;
+
+DROP TRIGGER IF EXISTS update_data;
+
 DELIMITER //
 CREATE TRIGGER update_data
     AFTER INSERT
