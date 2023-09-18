@@ -13,7 +13,7 @@ class Student {
 	public function __construct()
 	{
 		$this->cityObject = new City();
-		$this->object_student_school = 'Школа 66';
+		$this->school = 'Школа 66';
 	}
 
 	public function __clone()
@@ -23,7 +23,7 @@ class Student {
 		 * Иначе поле будет ссылаться на один и тот же объект
 		 */
 		$this->cityObject = clone $this->cityObject;
-		$this->object_student_school = 'Сельская школа';
+		$this->school = 'Сельская школа';
 	}
 }
 
