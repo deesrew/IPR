@@ -13,7 +13,6 @@
 все вьюшки содержащие функцию initScripts или initButtonScripts в которых есть строка "crypto_sign.js"
 ([\w|\W]*class[\w|\W]*_View[\w|\W]*_?init[\w|\W]{0,15}Scripts[\w|\W]crypto_sign\.js)
 
-
 поиск строк таких как
 getAuction()->getType() == '360'
 getAuction()->getType() == "360"
