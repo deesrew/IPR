@@ -1,0 +1,49 @@
+Профилирование PHP-кода
+
+самим php
+$start = microtime(true);
+#this->check();
+$time = microtime(true) - $start;
+
+Профайлер symfony
+~ composer require profiler --dev
+
+Xdebug - не профайлер
+- ЭТО ОТЛАДЧИК !
+
+
+XHProf
+
+минусы
+умеет считать только общее время, процессорное время и память
+не поддерживается на php выше 5 версии
+на новых PHP есть форки
+можно запустить графами, но будет менее понятно
+
+
+# https://dev.fabrikant.docker/trades/corporate/ProcedurePurchase/?action=view&id=68
+
+
+ORM_Lot_Object::isGiveUp 3->1
+ORM_Lot_Object::getProcedure 7->1
+Helper_Participation_Tariffs::initParticipationProcedureType 3->1
+
+blackfire
+- делают ребята из симофни
+- платный
+- похож на XHProf
+- можно профилировать тестирование
+
+что чаще всего тормозит
+- плохие алгоритмы
+- вложенные циклы
+- дисковые операции
+- плохие SQL запросы
+- взоимодейсвие с внешними сервисами
+- слишком много объектов
+
+
+Liveprof от баду
+
+на фабре есть
+Pinba

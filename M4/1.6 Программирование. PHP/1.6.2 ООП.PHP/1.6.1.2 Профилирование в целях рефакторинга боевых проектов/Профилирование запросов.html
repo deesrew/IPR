@@ -1,0 +1,75 @@
+профилирование запросов
+RESET QUERY CACHE
+
+
+0.000818
+SELECT `lot_participant_requirements`.* FROM `fabrikant_atom_tender`.`lot_participant_requirements`
+WHERE ((`fabrikant_atom_tender`.`lot_participant_requirements`.`lot_id` = '15'))
+AND ((`fabrikant_atom_tender`.`lot_participant_requirements`.`number` = 3135))
+AND ((`fabrikant_atom_tender`.`lot_participant_requirements`.`is_deleted` = 0))
+
+'1', 'SIMPLE', 'lot_participant_requirements', 'ALL', NULL, NULL, NULL, NULL, '25', 'Using where'
+
+CREATE INDEX number on fabrikant_atom_tender.lot_participant_requirements(number);
+
+
+
+0.000417
+SELECT `lot_participant_requirements`.* FROM `fabrikant_atom_tender`.`lot_participant_requirements`
+WHERE ((`fabrikant_atom_tender`.`lot_participant_requirements`.`lot_id` = '15'))
+AND ((`fabrikant_atom_tender`.`lot_participant_requirements`.`number` = 3135))
+AND ((`fabrikant_atom_tender`.`lot_participant_requirements`.`is_deleted` = 0))
+
+'1', 'SIMPLE', 'lot_participant_requirements', 'ref', 'number', 'number', '5', 'const', '1', 'Using where'
+
+drop INDEX number on fabrikant_atom_tender.lot_participant_requirements;
+
+НА ТЕСТЕ
+
+https://test.fabrikant.ru/trades/atom/Tender/?action=proposal&proposal_id=5435&lang=RU
+
+0.032471 -> 0.002388
+
+https://test.fabrikant.ru/trades/atom/Tender/?action=proposal_cost_summary_view&proposal_id=5435&lang=RU
+0.062373 -> 0.001340
+
+
+
+https://test.fabrikant.ru/trades/atom/Tender/?action=proposal_delivery_schedule_view&proposal_id=5435&lang=RU
+0.007596 -> 0.001855
+SELECT `lot_customers`.* FROM `fabrikant_atom_tender`.`lot_customers`
+WHERE ((`fabrikant_atom_tender`.`lot_customers`.`lot_id` = 6640));
+
+CREATE INDEX lot_id on fabrikant_atom_tender.lot_customers(lot_id);
+drop INDEX lot_id on fabrikant_atom_tender.lot_customers;
+
+
+
+https://test.fabrikant.ru/trades/atom/Tender/?action=proposal_participant_requirements_view&proposal_id=5435&lang=RU
+
+0.029076 -> 0.001053
+
+SELECT `lot_participant_requirement_docs`.* FROM `fabrikant_atom_tender`.`lot_participant_requirement_docs` WHERE ((`fabrikant_atom_tender`.`lot_participant_requirement_docs`.`is_deleted` = 0)) AND ((`fabrikant_atom_tender`.`lot_participant_requirement_docs`.`lot_id` = '6640'))
+
+show indexes from `fabrikant_atom_tender`.`lot_participant_requirement_docs`;
+
+# requirement_id
+# lot_id
+
+CREATE INDEX lot_id on fabrikant_atom_tender.lot_participant_requirement_docs(lot_id);
+CREATE INDEX requirement_id on fabrikant_atom_tender.lot_participant_requirement_docs(requirement_id);
+drop INDEX lot_id on fabrikant_atom_tender.lot_participant_requirement_docs;
+drop INDEX requirement_id on fabrikant_atom_tender.lot_participant_requirement_docs;
+
+
+
+CREATE INDEX lot_id on fabrikant_atom_tender.lot_participant_requirement_docs(lot_id);
+CREATE INDEX requirement_id on fabrikant_atom_tender.lot_participant_requirement_docs(requirement_id);
+CREATE INDEX lot_id on fabrikant_atom_tender.lot_customers(lot_id);
+CREATE INDEX number on fabrikant_atom_tender.lot_participant_requirements(number);
+
+
+drop INDEX number on fabrikant_atom_tender.lot_participant_requirements;
+drop INDEX lot_id on fabrikant_atom_tender.lot_customers;
+drop INDEX lot_id on fabrikant_atom_tender.lot_participant_requirement_docs;
+drop INDEX requirement_id on fabrikant_atom_tender.lot_participant_requirement_docs;
