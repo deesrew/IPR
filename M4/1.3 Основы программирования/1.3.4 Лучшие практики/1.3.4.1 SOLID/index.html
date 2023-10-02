@@ -1,0 +1,44 @@
+S:
+
+Yamarket:app/src/Service/Order/Builder.php
+
+вынести из Order/Builder
+- getProcedure
+- getBuyer
+- getDelivery
+- getPositions
+- getShop
+- getDocuments
+- getProcedureDocuments
+- getStateHistory
+
+оставить
+- setOrderData
+- buildOrder
+
+O:
+Yamarket:Controller/ProcedureController.php
+
+createProcedure
+
+при изменении структуры сущности Procedure (62 строчка) (дабавится новый параметр)
+нам придётся изменять код класса ProcedureController
+
+вынести создание процедуры из контроллера и оставить только метод $procedure = new ProcedureDraft->create();
+
+
+L: не нашёл (видимо, мы хорошо делаем ревью, чтобы допускать такие недочёты)
+
+I:
+Fabrikant: trades/Lib/Interfaces/ForeignFields/ORM/Positions.php
+
+вынес бы getName getNameEn 					-> PositionsName
+getCustomerName getCustomerNameEn  -> PositionsCustomerName
+getUnits getMeasureUnitEn			-> PositionsUnits
+
+trades/Lib/ProposalForms/DeliverySchedule/ImportExcel/Service/ResourceServiceInterface.php
+
+D:
+
+Yamarket:Controller/ProcedureController.php
+c 51 по 76 строки - вынести

@@ -4,7 +4,7 @@ class OrderRepository
 {
 	private $source;
 
-	public function setSource(\solid\IOrderSource $source)
+	public function setSource(IOrderSource $source)
 	{
 		$this->source = $source;
 	}
