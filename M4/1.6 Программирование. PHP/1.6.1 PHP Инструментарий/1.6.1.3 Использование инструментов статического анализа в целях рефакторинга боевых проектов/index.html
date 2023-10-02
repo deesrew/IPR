@@ -1,0 +1,70 @@
+Инструменты для анализа PHP-кода
+
+pre-commit php
+
+Инструменты для анализа PHP-кода
+
+Инструменты помогающие улучшить качество кода
+php -l (Syntax check only (lint)) — встроенная в ядро PHP проверка синтаксиса.
+
+php-cs-fixer (PHP Coding Standards Fixer)  Исправляет ваш код в соответствии со стандартами
+~ mkdir -p tools/php-cs-fixer
+~ composer require --working-dir=tools/php-cs-fixer friendsofphp/php-cs-fixer
+~ tools/php-cs-fixer/vendor/bin/php-cs-fixer fix src
+
+php-cs + php-cbf (PHP CodeSniffer + PHP Code Beautifier)
+
+cs - обнаружения нарушений определенного стандарта кодирования
+cbf - автоматически исправляет стандартные нарушения кодирования
+
+~ composer require --working-dir=tools/php-cs "squizlabs/php_codesniffer=*"
+
+~ php tools/php-cs/vendor/bin/phpcs -h
+~ php tools/php-cs/vendor/bin/phpcs src
+~ php tools/php-cs/vendor/bin/phpcs --standard=PSR12 src
+
+~ php tools/php-cs/vendor/bin/phpcbf --standard=PSR12 src
+
+
+- php-cs обнаружения нарушений определенного стандарта кодирования
+- phpcbf автоматически исправляет стандартные нарушения кодирования
+
+php-md (PHP Mess Detector) ищет несколько потенциальных проблем
+синтаксические ошибки, субоптимальный код, слишком сложные выражения, неиспользуемые параметры/методы/свойства
+
+~ composer require --working-dir=tools/phpmd "phpmd/phpmd"
+~ php tools/phpmd/vendor/bin/phpmd src ansi tools/phpmd/rulesets.xml
+~ php tools/phpmd/vendor/bin/phpmd src xml tools/phpmd/rulesets.xml >> tools/phpmd/analys_result.xml
+
+php-cpd (PHP Copy/Paste Detector) Детектор копирования / вставки для кода PHP
+~ composer require --working-dir=tools/phpcpd "phpcpd"
+~ php tools/phpcpd/vendor/bin/phpcpd --fuzzy src
+
+PhpMetrics (статического анализа для PHP. Выдает информацию о проекте и используемых классах в виде сгенерированного сайта)
+~ mkdir -p tools/phpmetrics
+~ composer require --working-dir=tools/phpmetrics phpmetrics/phpmetrics --dev
+~ php tools/phpmetrics/vendor/bin/phpmetrics --report-html=tools/phpmetrics/myreport src
+
+phpstan (PHP Static Analysis Tool) анализирует количество и типы параметров, передаваемых конструкторам,
+методам и функциям; типы, возвращаемые методами и функциями и т.д.
+есть 9 уровней
+
+~ mkdir -p tools/phpstan
+~ composer require --dev --working-dir=tools/phpstan phpstan/phpstan
+~ php tools/phpstan/vendor/bin/phpstan analyse src/Controller/
+~ php tools/phpstan/vendor/bin/phpstan analyse src/Service -l 2
+
+phpdcd PHP Dead Code Detector сообщает пользователю о функциях и методах, которые не используются в коде.
+
+
+
+Инструменты для контроля совместимости кода с разными версиями PHP
+PHP Compatibility набор правил для PHP Code Sniffer, которые проверяют совместимость текущего кода с другими версиями PHP
+
+PHP 7 Compatibility Checker — инструмент для проверки кода PHP 5.3 – 5.6 на совместимость с PHP 7
+
+
+
+Инструменты для поиска уязвимостей в PHP-коде
+К сожалению нам не удалось найти ни одного проекта для анализа уязвимостей в PHP-коде
+SonarPHP
